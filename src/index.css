@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+@theme {
+  --color-heritage-paper: #FDFBF7;
+  --color-heritage-paper-dark: #EFECE1;
+  --color-heritage-indigo: #1A2639;
+  --color-heritage-saffron: #E55934;
+  --color-heritage-gold: #C5A059;
+  --color-heritage-green: #2C4C3B;
+  
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'Inter', sans-serif;
+  
+  --shadow-tactile-sm: 0 2px 0 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.05);
+  --shadow-tactile-md: 0 4px 0 0 rgba(0,0,0,0.1), 0 2px 4px 0 rgba(0,0,0,0.05);
+  --shadow-tactile-lg: 0 6px 0 0 rgba(0,0,0,0.1), 0 4px 8px 0 rgba(0,0,0,0.05);
+  --shadow-tactile-active: 0 0 0 0 rgba(0,0,0,0.1);
+}
+
+@layer base {
+  body {
+    background-color: var(--color-heritage-paper);
+    color: var(--color-heritage-indigo);
+    font-family: var(--font-body);
+    background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+    margin: 0;
+    min-height: 100vh;
+  }
+}
+
+/* Custom scrollbar for a cleaner look */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-heritage-paper-dark);
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--color-heritage-gold);
+}
+
+/* Tactile UI utilities */
+.tactile-card {
+  background-color: #FFFFFF;
+  border: 2px solid var(--color-heritage-indigo);
+  border-radius: 12px;
+  box-shadow: var(--shadow-tactile-lg);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.tactile-card-flat {
+  background-color: #FFFFFF;
+  border: 2px solid var(--color-heritage-indigo);
+  border-radius: 12px;
+}
+
+.tactile-border {
+  border: 2px solid var(--color-heritage-indigo);
+}
+
+.heritage-heading {
+  font-family: var(--font-display);
+  color: var(--color-heritage-indigo);
+}
+
+.heritage-subheading {
+  font-family: var(--font-body);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: var(--color-heritage-gold);
+}
