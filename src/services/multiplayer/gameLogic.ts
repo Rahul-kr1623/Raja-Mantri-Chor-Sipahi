@@ -146,6 +146,18 @@ export const handleClientAction = (action: any) => {
       store.updateRoom({ chatMessages: chats.slice(-50) }); // Keep last 50
       break;
 
+    case 'KICK_PLAYER': {
+      // Only the host can kick players; ignore if sender is not the host
+      if (playerId !== room.hostId) break;
+      const targetId = action.targetId as string;
+      if (!targetId || targetId === room.hostId) break;
+
+      // Notify the peer via WebRTC then remove from state
+      multiplayer.kickPlayer(targetId);
+      store.removePlayer(targetId);
+      break;
+    }
+
     case 'ADD_LOG':
       const newLog = {
         id: Date.now().toString() + Math.random().toString(36).substring(7),

@@ -4,6 +4,10 @@ import { useRoomStore } from '../../store/roomStore';
 import { handleClientAction } from './gameLogic';
 import toast from 'react-hot-toast';
 
+// Callback invoked when the local player is kicked by the host
+let onKickedCallback: (() => void) | null = null;
+export const setOnKickedCallback = (cb: () => void) => { onKickedCallback = cb; };
+
 // PeerJS assigns an ID. We prefix room codes so they are less likely to collide globally.
 const PREFIX = 'rmcs-game-'; 
 
@@ -124,6 +128,10 @@ class MultiplayerService {
           } else if (data.type === 'ERROR') {
             toast.error(data.message);
             reject(new Error(data.message));
+          } else if (data.type === 'KICK') {
+            toast.error('You have been kicked from the room by the host.');
+            useRoomStore.getState().clearRoom();
+            if (onKickedCallback) onKickedCallback();
           }
         });
 
@@ -148,6 +156,16 @@ class MultiplayerService {
       if (hostConn && hostConn.open) {
         hostConn.send({ ...action, playerId: this.myPlayerId });
       }
+    }
+  }
+
+  // HOST-ONLY: send a KICK message to a specific peer and close the connection
+  public kickPlayer(targetPeerId: string) {
+    if (!this.isHost) return;
+    const conn = this.connections.get(PREFIX + targetPeerId);
+    if (conn && conn.open) {
+      conn.send({ type: 'KICK' });
+      setTimeout(() => conn.close(), 500);
     }
   }
 

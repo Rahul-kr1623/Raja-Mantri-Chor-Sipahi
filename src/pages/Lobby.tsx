@@ -13,6 +13,7 @@ import { usePlayerStore } from '../store/playerStore';
 import { RoomStatus, Player } from '../types';
 import { motion } from 'motion/react';
 import toast from 'react-hot-toast';
+import { setOnKickedCallback } from '../services/multiplayer/peer';
 
 export const Lobby: React.FC = () => {
   const { roomId } = useParams<{ roomId: string }>();
@@ -20,7 +21,13 @@ export const Lobby: React.FC = () => {
   
   useRoom(roomId || null);
   usePresence(roomId || null);
-  
+
+  // If this client gets kicked, navigate them back to home
+  useEffect(() => {
+    setOnKickedCallback(() => navigate('/'));
+    return () => setOnKickedCallback(() => {});
+  }, [navigate]);
+
   const room = useRoomStore(state => state.room);
   const playerId = usePlayerStore(state => state.playerId);
 
@@ -80,6 +87,12 @@ export const Lobby: React.FC = () => {
     }
   };
 
+  const handleKickPlayer = (targetId: string) => {
+    if (!isHost) return;
+    useRoomStore.getState().dispatchAction({ type: 'KICK_PLAYER', targetId });
+    toast.success('Player kicked.');
+  };
+
   return (
     <PageTransition>
       <div className="flex flex-1 flex-col items-center pt-8">
@@ -92,6 +105,8 @@ export const Lobby: React.FC = () => {
               player={player}
               isHost={player?.id === room.hostId}
               isMe={player?.id === playerId}
+              canKick={isHost}
+              onKick={handleKickPlayer}
             />
           ))}
         </div>
