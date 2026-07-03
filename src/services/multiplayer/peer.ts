@@ -75,6 +75,12 @@ class MultiplayerService {
 
     // Add player to state
     useRoomStore.getState().addPlayer(player);
+    
+    // Acknowledge join success
+    const conn = this.connections.get(peerId);
+    if (conn) {
+      conn.send({ type: 'JOIN_SUCCESS' });
+    }
   }
 
   private handlePlayerLeave(peerId: string) {
@@ -107,8 +113,15 @@ class MultiplayerService {
     this.isHost = false;
     this.myPlayerId = player.id;
 
-    // Use playerId as peerId for clients
     return new Promise((resolve, reject) => {
+      // Setup a connection timeout
+      const timeout = setTimeout(() => {
+        if (this.peer) {
+          this.peer.destroy();
+        }
+        reject(new Error('Connection timed out. Please try again.'));
+      }, 10000);
+
       this.peer = new Peer(PREFIX + player.id);
 
       this.peer.on('open', (id) => {
@@ -117,15 +130,18 @@ class MultiplayerService {
         conn.on('open', () => {
           this.connections.set('host', conn);
           
-          // Send join info
+          // Send join info - we do NOT resolve here anymore, we wait for JOIN_SUCCESS
           conn.send({ type: 'JOIN', player });
-          resolve();
         });
 
         conn.on('data', (data: any) => {
-          if (data.type === 'STATE_UPDATE') {
+          if (data.type === 'JOIN_SUCCESS') {
+            clearTimeout(timeout);
+            resolve();
+          } else if (data.type === 'STATE_UPDATE') {
             useRoomStore.getState().updateFromSnapshot(data.room);
           } else if (data.type === 'ERROR') {
+            clearTimeout(timeout);
             toast.error(data.message);
             reject(new Error(data.message));
           } else if (data.type === 'KICK') {
@@ -142,6 +158,7 @@ class MultiplayerService {
       });
 
       this.peer.on('error', (err) => {
+        clearTimeout(timeout);
         reject(err);
       });
     });

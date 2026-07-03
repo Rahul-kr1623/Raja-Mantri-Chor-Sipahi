@@ -200,22 +200,24 @@ export const Game: React.FC = () => {
 
   return (
     <PageTransition>
-      <div className="flex flex-1 flex-col relative w-full h-full min-h-[70vh]">
+      <div className="flex flex-1 flex-col relative w-full h-full min-h-0">
         <RoundIndicator current={room.currentRound} total={room.maxRounds} />
         
         {/* The Tabletop */}
-        <div className="absolute inset-0 m-2 sm:m-4 md:m-8 lg:m-16 rounded-xl md:rounded-3xl border-4 border-[var(--color-heritage-indigo)] bg-[var(--color-heritage-paper-dark)] opacity-30 pointer-events-none shadow-[inset_var(--shadow-tactile-lg)]">
+        <div className="absolute inset-0 mx-2 mb-2 mt-20 sm:mx-4 sm:mb-4 sm:mt-24 md:mx-8 md:mb-8 md:mt-24 lg:mx-16 lg:mb-16 lg:mt-28 rounded-xl md:rounded-3xl border-4 border-[var(--color-heritage-indigo)] bg-[var(--color-heritage-paper-dark)] opacity-30 pointer-events-none shadow-[inset_var(--shadow-tactile-lg)]">
           {/* Subtle table pattern can go here */}
         </div>
 
-        {/* Players */}
-        <TablePlayer player={myPlayerInfo} position="bottom" isMe={true} />
-        <TablePlayer player={topPlayer} position="top" isMe={false} />
-        <TablePlayer player={leftPlayer} position="left" isMe={false} />
-        <TablePlayer player={rightPlayer} position="right" isMe={false} />
+        {/* Players Container - matches tabletop inset */}
+        <div className="absolute inset-0 mx-2 mb-2 mt-20 sm:mx-4 sm:mb-4 sm:mt-24 md:mx-8 md:mb-8 md:mt-24 lg:mx-16 lg:mb-16 lg:mt-28 pointer-events-none">
+          <TablePlayer player={myPlayerInfo} position="bottom" isMe={true} />
+          <TablePlayer player={topPlayer} position="top" isMe={false} />
+          <TablePlayer player={leftPlayer} position="left" isMe={false} />
+          <TablePlayer player={rightPlayer} position="right" isMe={false} />
+        </div>
 
         {/* Central Play Area */}
-        <div className="flex-1 flex flex-col items-center justify-center mt-8 z-10 w-full relative">
+        <div className="flex-1 flex flex-col items-center justify-center mt-8 z-10 w-full relative overflow-y-auto min-h-0">
           {renderPhase()}
         </div>
 

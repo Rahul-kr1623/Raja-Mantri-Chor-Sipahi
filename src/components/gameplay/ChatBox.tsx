@@ -47,7 +47,7 @@ export const ChatBox: React.FC = () => {
       {/* Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-4 right-4 z-50 p-4 rounded-full bg-[var(--color-heritage-saffron)] text-white shadow-[var(--shadow-tactile-lg)] hover:-translate-y-1 transition-transform tactile-border relative"
+        className="fixed bottom-4 right-4 z-50 w-14 h-14 flex items-center justify-center rounded-full bg-[var(--color-heritage-saffron)] text-white shadow-[var(--shadow-tactile-lg)] hover:-translate-y-1 transition-transform tactile-border"
       >
         <MessageSquare size={24} />
         <AnimatePresence>

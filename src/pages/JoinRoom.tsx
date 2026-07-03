@@ -36,7 +36,8 @@ export const JoinRoom: React.FC = () => {
     const formattedCode = roomCode.trim().toUpperCase();
     
     try {
-      const playerId = uuidv4();
+      const existingPlayerId = usePlayerStore.getState().playerId;
+      const playerId = existingPlayerId || uuidv4();
       
       const player = {
         id: playerId,

@@ -19,20 +19,18 @@ export const TablePlayer: React.FC<TablePlayerProps> = ({ player, position, isMe
       case 'bottom': 
         return 'flex-col translate-y-2 md:translate-y-4';
       case 'left': 
-        // On mobile, they are top-left (stacking), on desktop left-center (row)
         return 'flex-col md:flex-row md:-translate-x-4';
       case 'right': 
-        // On mobile, they are top-right (stacking), on desktop right-center (row-reverse)
         return 'flex-col md:flex-row-reverse md:translate-x-4';
     }
   };
 
   const getAbsoluteClasses = () => {
     switch (position) {
-      case 'top': return 'top-2 left-1/2 -translate-x-1/2 md:top-4 md:left-1/2 md:-translate-x-1/2';
-      case 'bottom': return 'bottom-2 left-1/2 -translate-x-1/2 md:bottom-4 md:left-1/2 md:-translate-x-1/2';
-      case 'left': return 'top-2 left-2 md:top-1/2 md:-translate-y-1/2 md:left-4';
-      case 'right': return 'top-2 right-2 md:top-1/2 md:-translate-y-1/2 md:right-4';
+      case 'top': return 'top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto';
+      case 'bottom': return 'bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 pointer-events-auto';
+      case 'left': return 'top-1/2 left-0 -translate-y-1/2 -translate-x-1/2 pointer-events-auto';
+      case 'right': return 'top-1/2 right-0 -translate-y-1/2 translate-x-1/2 pointer-events-auto';
     }
   };
 
